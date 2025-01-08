@@ -18,14 +18,26 @@ export default async function LaunchBrowserExecution(
 let browser
 
     if (process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production') {
-      // Configure the version based on your package.json (for your future usage).
-      const executablePath = await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar')
-      browser = await puppeteer.launch({
-        executablePath,
-        args: chromium.args,
-        headless: chromium.headless,
-        defaultViewport: chromium.defaultViewport
-      })
+      try {
+        const executablePath = await chromium.executablePath(
+          'https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar'
+        );
+        console.log("Chromium executable path:", executablePath);
+
+        browser = await puppeteer.launch({
+          executablePath,
+          args: chromium.args,
+          headless: chromium.headless,
+          defaultViewport: chromium.defaultViewport,
+        });
+      } catch (error: any) {
+        console.error("Failed to launch Puppeteer in production:", error);
+        environment.setLog(
+          `Failed to launch Puppeteer in production: ${error.message}`,
+          LogLevel.ERROR
+        );
+        return false;
+      }
     }
 else{
      browser = await puppeteer.launch({
