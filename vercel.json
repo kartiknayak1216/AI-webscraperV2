@@ -1,6 +1,6 @@
 {
     "functions": {
-        "node": {
+        "api/*": {
             "includeFiles": [
                 "node_modules/@sparticuz/chromium-min/**/*",
                 "node_modules/puppeteer-core/**/*"
