@@ -1,5 +1,5 @@
 import { WorkflowTask } from "@/lib/types/task"
-import {Browser, Page} from "puppeteer"
+import {Browser, Page} from "puppeteer-core"
 export enum LogLevel {
     INFO = "info",
     WARNING = "warning",

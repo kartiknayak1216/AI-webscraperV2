@@ -1,9 +1,8 @@
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 import { EnvironmentExecution } from "./type";
 import { LaunchBrowser } from "../../_task/launchbrowser";
 import { LogLevel } from "./type"; 
 import chromium from '@sparticuz/chromium-min';
-import puppeteerCore, { type Browser as BrowserCore } from 'puppeteer-core';
 
 export default async function LaunchBrowserExecution(
   environment: EnvironmentExecution<typeof LaunchBrowser>
