@@ -8,7 +8,7 @@ import { ExecutionStatus } from "@/lib/types/workflow";
 import { AppNode, TaskParamType } from "@/lib/types/task";
 import { ExecutionRegistry } from "../executionregistry";
 import { Environment, EnvironmentExecution, LogLevel } from "../executionregistry/type";
-import { Browser, Page } from "puppeteer";
+import { Browser, Page } from "puppeteer-core";
 import { Edge } from "@xyflow/react";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
