@@ -14,7 +14,6 @@ export default async function Executionviewerpage({
   return (
     <div className="flex flex-col h-screen w-full overflow-hidden">
       <section className="flex h-full overflow-auto">
-        {/* Main content with skeleton as fallback */}
         <Suspense fallback={<UserWorkflowSkeleton />}>
           <ExectionViewerWrapper
             executionId={params.executionId}
@@ -43,7 +42,6 @@ async function ExectionViewerWrapper({
   if (!execution) {
     return
   }
-  console.log("exc----------got-----------------")
 
   return (
     <div>

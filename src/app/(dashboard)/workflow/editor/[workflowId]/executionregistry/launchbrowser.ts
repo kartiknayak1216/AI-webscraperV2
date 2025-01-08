@@ -15,9 +15,10 @@ export default async function LaunchBrowserExecution(
       environment.setLog("Website URL is required but not provided.", LogLevel.ERROR);
       return false;
     }
-let browser
+    let browser;
 
     if (process.env.NODE_ENV === 'production' || process.env.VERCEL_ENV === 'production') {
+      console.log("Running in production environment.");
       try {
         const executablePath = await chromium.executablePath(
           'https://github.com/Sparticuz/chromium/releases/download/v131.0.1/chromium-v131.0.1-pack.tar'
@@ -30,21 +31,26 @@ let browser
           headless: chromium.headless,
           defaultViewport: chromium.defaultViewport,
         });
+        console.log("Puppeteer browser launched in production.");
       } catch (error: any) {
         console.error("Failed to launch Puppeteer in production:", error);
-        environment.setLog(
-          `Failed to launch Puppeteer in production: ${error.message}`,
-          LogLevel.ERROR
-        );
+        environment.setLog(`Production error: ${error.message}`, LogLevel.ERROR);
+        return false;
+      }
+    } else {
+      console.log("Running in development environment.");
+      try {
+        browser = await puppeteer.launch({
+          headless: true,
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        });
+        console.log("Puppeteer browser launched in development.");
+      } catch (error: any) {
+        console.error("Failed to launch Puppeteer in development:", error);
+        environment.setLog(`Development error: ${error.message}`, LogLevel.ERROR);
         return false;
       }
     }
-else{
-     browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-       });
-      }
 
     if (!browser) {
       
