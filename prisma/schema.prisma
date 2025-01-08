@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Workflow{
+  id String @id @default(cuid())
+  userId String
+  description String
+  defination String
+  name String
+  status String 
+  createdAt DateTime @default(now())
+  lastRunAt DateTime?
+  lastRunId String?
+  lastRunStatus String?
+  ispublished Boolean @default(false)
+  updatedAt DateTime @updatedAt()
+  creditCost Int @default(0)
+  executionPlan String?
+  executionFlow String?
+  cron String?
+  nextRunAt DateTime?
+  executions WorkflowExecution[]
+  @@unique([userId,name])
+
+}
+model WorkflowExecution{
+      id String @id @default(cuid())
+      workflowId String
+      userId String
+      trigger String
+      status String
+    createdAt DateTime @default(now())
+    startedAt DateTime?
+    completedAt DateTime?
+    creditConsumed Int @default(0)     
+    workflow Workflow @relation(fields: [workflowId],references: [id],onDelete:Cascade)
+   phase ExecutionPhase[]
+
+  
+
+}
+
+model ExecutionPhase{
+      id String @id @default(cuid())
+      userId String
+      status String
+      number Int
+      node String
+      name String
+      inputs String?
+      outputs String?
+      creditCost Int?
+       startedAt DateTime?
+    completedAt DateTime?
+     workflowExecutionId String
+    execution WorkflowExecution @relation(fields: [workflowExecutionId],references: [id],onDelete: Cascade)
+ logs ExecutionLog []
+
+}
+
+model ExecutionLog{
+  id String @id @default(cuid())
+logLevel String
+message String
+timestamp DateTime @default(now())
+executionPhaseId String
+executionPhase ExecutionPhase @relation(fields: [executionPhaseId],references: [id],onDelete:Cascade)
+}
+model Credential{
+    id String @id @default(cuid())
+   userId String 
+   name String
+   value String
+   createdAt DateTime @default(now())
+
+   @@unique([userId,name])
+   
+}
+model User{
+    id String @id @default(cuid())
+   userId String @unique
+   balance Int?
+}
